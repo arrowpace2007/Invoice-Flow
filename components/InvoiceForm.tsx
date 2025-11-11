@@ -5,8 +5,9 @@ import { AppView } from '../App';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Button } from './ui/Button';
 import { ArrowRightIcon, PlusIcon } from './icons';
-import { Invoice, InvoiceItem, Client, InvoiceStatus } from '../types';
+import { Invoice, InvoiceItem, InvoiceStatus, InvoiceTemplate } from '../types';
 import { generateId, formatCurrency } from './utils';
+import { TemplateSelector } from './ui/TemplateSelector';
 
 interface InvoiceFormProps {
     setView: (view: AppView) => void;
@@ -17,7 +18,7 @@ const emptyInvoiceItem = (): InvoiceItem => ({ id: generateId('item'), descripti
 
 export const InvoiceForm: React.FC<InvoiceFormProps> = ({ setView, existingInvoiceId }) => {
     const { state, dispatch } = useAppContext();
-    const [invoice, setInvoice] = useState<Omit<Invoice, 'id' | 'subtotal' | 'gst' | 'total' | 'client' > & { clientId: string }>({
+    const [invoice, setInvoice] = useState<Omit<Invoice, 'id' | 'subtotal' | 'gst' | 'total' | 'client' > & { clientId: string, template: InvoiceTemplate }>({
         invoiceNumber: `INV-${new Date().getFullYear()}-${String(state.invoices.length + 1).padStart(3, '0')}`,
         clientId: '',
         items: [emptyInvoiceItem()],
@@ -25,13 +26,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ setView, existingInvoi
         dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         status: InvoiceStatus.Draft,
         notes: 'Thank you for your business. Payment is due within 15 days.',
+        template: state.settings.defaultTemplate,
     });
 
     useEffect(() => {
         if (existingInvoiceId) {
             const existing = state.invoices.find(inv => inv.id === existingInvoiceId);
             if (existing) {
-                setInvoice({ ...existing, clientId: existing.client.id });
+                setInvoice({ ...existing, clientId: existing.client.id, template: existing.template });
             }
         }
     }, [existingInvoiceId, state.invoices]);
@@ -39,6 +41,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ setView, existingInvoi
     const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setInvoice({ ...invoice, [e.target.name]: e.target.value });
     };
+
+    const handleTemplateSelect = (template: InvoiceTemplate) => {
+        setInvoice({ ...invoice, template });
+    }
 
     const handleItemChange = (index: number, field: keyof InvoiceItem, value: string | number) => {
         const newItems = [...invoice.items];
@@ -128,6 +134,13 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({ setView, existingInvoi
                             ))}
                         </div>
                         <Button type="button" variant="secondary" onClick={addItem} className="mt-4"><PlusIcon className="w-4 h-4 mr-2" /> Add Item</Button>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader><CardTitle>Design</CardTitle></CardHeader>
+                    <CardContent>
+                        <TemplateSelector selectedValue={invoice.template} onSelect={handleTemplateSelect} />
                     </CardContent>
                 </Card>
 

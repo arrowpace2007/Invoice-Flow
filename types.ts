@@ -6,6 +6,8 @@ export enum InvoiceStatus {
   Draft = 'Draft',
 }
 
+export type InvoiceTemplate = 'classic' | 'modern' | 'minimalist';
+
 export interface Client {
   id: string;
   name: string;
@@ -34,6 +36,7 @@ export interface Invoice {
   subtotal: number;
   gst: number;
   total: number;
+  template: InvoiceTemplate;
 }
 
 export interface Settings {
@@ -42,4 +45,5 @@ export interface Settings {
     companyName: string;
     companyAddress: string;
     companyGst: string;
+    defaultTemplate: InvoiceTemplate;
 }

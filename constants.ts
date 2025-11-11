@@ -1,5 +1,5 @@
 
-import { Client, Invoice, InvoiceStatus, Settings } from './types';
+import { Client, Invoice, InvoiceStatus, Settings, InvoiceTemplate } from './types';
 
 export const clients: Client[] = [
   { id: 'c1', name: 'Rohan Sharma', email: 'rohan.s@example.com', avatarUrl: 'https://i.pravatar.cc/150?u=c1', address: '123 Tech Park, Bengaluru, 560100', gstNumber: '29ABCDE1234F1Z5' },
@@ -19,6 +19,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Paid,
     notes: 'Thank you for your business.',
     subtotal: 15000, gst: 2700, total: 17700,
+    template: 'modern',
   },
   {
     id: 'inv2',
@@ -30,6 +31,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Pending,
     notes: 'Monthly retainer for July.',
     subtotal: 22500, gst: 4050, total: 26550,
+    template: 'classic',
   },
   {
     id: 'inv3',
@@ -41,6 +43,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Overdue,
     notes: '',
     subtotal: 8000, gst: 1440, total: 9440,
+    template: 'minimalist',
   },
   {
     id: 'inv4',
@@ -52,6 +55,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Pending,
     notes: 'As per our agreement.',
     subtotal: 35000, gst: 6300, total: 41300,
+    template: 'classic',
   },
     {
     id: 'inv5',
@@ -63,6 +67,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Paid,
     notes: '',
     subtotal: 12000, gst: 2160, total: 14160,
+    template: 'modern',
   },
   {
     id: 'inv6',
@@ -77,6 +82,7 @@ export const invoices: Invoice[] = [
     status: InvoiceStatus.Draft,
     notes: 'Project kickoff invoice.',
     subtotal: 45000, gst: 8100, total: 53100,
+    template: 'classic',
   },
 ];
 
@@ -85,5 +91,6 @@ export const settings: Settings = {
     userEmail: "ananya@freelance.com",
     companyName: "Ananya Roy Designs",
     companyAddress: "7th Main, Indiranagar, Bengaluru, 560038",
-    companyGst: "29AABBCCDDE1Z2"
+    companyGst: "29AABBCCDDE1Z2",
+    defaultTemplate: 'classic',
 };
