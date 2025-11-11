@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InvoiceFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+      @keyframes pulse-glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(255, 93, 36, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 35px rgba(255, 93, 36, 0.4);
+        }
+      }
+      @keyframes background-pan {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      @keyframes gentle-drift {
+        0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        25% { transform: translate(5px, -10px) rotate(3deg) scale(1.02); }
+        50% { transform: translate(-5px, 10px) rotate(-3deg) scale(1); }
+        75% { transform: translate(3px, -5px) rotate(2deg) scale(1.01); }
+        100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      }
+      @keyframes glass-reveal {
+        from {
+          opacity: 0;
+          transform: translateY(15px) scale(0.95);
+          filter: blur(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0);
+        }
+      }
+
+      .noise-texture {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWYmJilpaW8vLzLysrGxsbAvr6dnZ2urq7DR0e8tmhJAAAAVElEQVR42tTNOw7AIAwE0b4o+3/h/05U3dO2w52V5HFY5l5ycnPMybM9b1gVlY3ETjK84y4v5Z00IksTTi8k21eRv4i/EM22uWlT0a4d04sHOLesg32ZD5iAF2wRz21cUAAAAASUVORK5CYII=');
+        background-repeat: repeat;
+        opacity: 0.05;
+        pointer-events: none;
+        z-index: 9999;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Lora', 'serif'],
+            },
+            colors: {
+              'brand-orange': '#FF5D24',
+              'brand-peach': '#FFDBC9',
+              'brand-background': '#F9F8F6',
+              'brand-text-primary': '#2D2D2D',
+              'brand-text-secondary': '#6B6B6B',
+              'brand-border': '#EAE8E4',
+              'status-paid': '#22C55E',
+              'status-paid-bg': '#E9F9EF',
+              'status-pending': '#F59E0B',
+              'status-pending-bg': '#FEF7E7',
+              'status-overdue': '#EF4444',
+              'status-overdue-bg': '#FEEEEE',
+            },
+            animation: {
+              fadeInUp: 'fadeInUp 0.8s ease-out forwards',
+              float: 'float 6s ease-in-out infinite',
+              'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+              'background-pan': 'background-pan 15s linear infinite',
+              'gentle-drift': 'gentle-drift 12s ease-in-out infinite',
+              'glass-reveal': 'glass-reveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+            },
+            keyframes: {
+              fadeInUp: {
+                from: { opacity: 0, transform: 'translateY(20px)' },
+                to: { opacity: 1, transform: 'translateY(0)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-15px)' },
+              },
+               'pulse-glow': {
+                '0%, 100%': { boxShadow: '0 0 20px rgba(255, 93, 36, 0.2)' },
+                '50%': { boxShadow: '0 0 35px rgba(255, 93, 36, 0.4)' },
+              },
+              'background-pan': {
+                '0%': { 'background-position': '0% 50%' },
+                '50%': { 'background-position': '100% 50%' },
+                '100%': { 'background-position': '0% 50%' },
+              },
+              'gentle-drift': {
+                '0%': { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
+                '25%': { transform: 'translate(5px, -10px) rotate(3deg) scale(1.02)' },
+                '50%': { transform: 'translate(-5px, 10px) rotate(-3deg) scale(1)' },
+                '75%': { transform: 'translate(3px, -5px) rotate(2deg) scale(1.01)' },
+                '100%': { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
+              },
+              'glass-reveal': {
+                'from': { opacity: 0, transform: 'translateY(15px) scale(0.95)', filter: 'blur(5px)' },
+                'to': { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+              },
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.1",
+    "tailwind-merge": "https://aistudiocdn.com/tailwind-merge@^2.4.0",
+    "@radix-ui/react-slot": "https://aistudiocdn.com/@radix-ui/react-slot@^1.2.4",
+    "class-variance-authority": "https://aistudiocdn.com/class-variance-authority@^0.7.1",
+    "motion/react": "https://aistudiocdn.com/motion@^10.18.0/react"
+  }
+}
+</script>
+</head>
+  <body class="bg-brand-background bg-gradient-to-br from-brand-background via-orange-50 to-amber-100/50 animate-background-pan" style="background-size: 200% 200%;">
+    <div class="noise-texture"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
